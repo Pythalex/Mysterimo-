@@ -117,7 +117,7 @@ string mix_word(string word)
     return new_word;
 }
 
-bool round(std::ifstream& stream, int round_number, int words, vector<string>& chosen_words)
+bool round(std::ifstream& stream, int round_number, int words, vector<string> chosen_words)
 /** ------------------------------------------------
 * Rules a game round.
 *
