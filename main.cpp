@@ -2,6 +2,7 @@
 #include <fstream>
 #include <cstdlib>
 #include <ctime>
+#include <vector>
 
 using namespace std;
 
@@ -35,7 +36,7 @@ int dic_size(ifstream& stream)
     }
     stream.clear();
     stream.seekg(0, ios::beg);
-    // On revient au début du fichier
+    // On revient au dÃ©but du fichier
 
     return line_num;
 }
@@ -116,7 +117,7 @@ string mix_word(string word)
     return new_word;
 }
 
-bool round(std::ifstream& stream, int round_number, int words)
+bool round(std::ifstream& stream, int round_number, int words, vector<string>& chosen_words)
 /** ------------------------------------------------
 * Rules a game round.
 *
@@ -124,6 +125,8 @@ bool round(std::ifstream& stream, int round_number, int words)
 {
     string word (choices_word(stream, words));
     // Word selection
+    chosen_words[chosen_words.size() -1] = word;
+    // We add the word to the list
     string mixed_word (mix_word(word));
     // Word mixing
 
@@ -211,9 +214,12 @@ int main()
     int round_number (1);
     bool game_continue (true);
 
+    vector<string> chosen_words(0);
+    // List of all words chosen for the game
+
     do
     {
-        game_continue = round(stream, round_number, words);
+        game_continue = round(stream, round_number, words, chosen_words);
 
         if (game_continue)
         {
