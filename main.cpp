@@ -7,19 +7,19 @@
 using namespace std;
 
 void title_screen()
-/** ------------------------------------------------
+/**************************************************
 * Display the game Title Screen and a press start
 * waiting screen. Returns nothing.
 *** ----------------------------------------------*/
 {
     cout << "======== MOT MYSTERE =========" << endl;
     cout << "         press start" << endl << endl;
-    system("pause");
+    cin.get();
     // ECRAN TITRE
 }
 
 int dic_size(ifstream& stream)
-/** ------------------------------------------------
+/**************************************************
 * Returns the number of words in the dictionnary
 * text file of the game folder : '~\dic.txt'
 * Each word MUST take one line, no more no less.
@@ -42,7 +42,7 @@ int dic_size(ifstream& stream)
 }
 
 string choices_word(std::ifstream& stream, int words)
-/** ------------------------------------------------
+/****************************************************
 * Pseudo-randomly choices a word in the dictionnary
 * and returns it.
 *** ----------------------------------------------*/
@@ -65,7 +65,7 @@ string choices_word(std::ifstream& stream, int words)
 }
 
 bool is_in(int value, int table[], int table_size)
-/** ------------------------------------------------
+/****************************************************
 * Finds if an int value exists in an int array,
 * returns boolean.
 *** ----------------------------------------------*/
@@ -79,7 +79,7 @@ bool is_in(int value, int table[], int table_size)
 }
 
 string mix_word(string word)
-/** ------------------------------------------------
+/****************************************************
 * Pseudo-randomly mix a word, without loyalty
 * verification.
 *** ----------------------------------------------*/
@@ -118,28 +118,27 @@ string mix_word(string word)
 }
 
 bool round(std::ifstream& stream, int round_number, int words, vector<string> chosen_words)
-/** ------------------------------------------------
+/****************************************************
 * Rules a game round.
 *
 *** ----------------------------------------------*/
 {
     string word (choices_word(stream, words));
     // Word selection
-    chosen_words[chosen_words.size() -1] = word;
+    chosen_words.push_back(word);
     // We add the word to the list
     string mixed_word (mix_word(word));
     // Word mixing
 
-    cout << "Word : " + mixed_word << endl << "What's the original ?" << endl;
-    cout << "(type 'quit' to exit the game" << endl << endl;
-    cout << "Word : ";
+    cout << "MOT : " + mixed_word << endl << "Quel est l'original ?" << endl;
+    cout << "(Entrez 'quit' pour quitter le jeu ! )" << endl << endl;
+    cout << "MOT ORIGINAL : ";
     bool victory (false);
     string entry;
 
     do
     {
-        cin >> entry;
-        cin.ignore();
+        getline(cin, entry);
 
         if (entry == word)
         {
@@ -151,8 +150,8 @@ bool round(std::ifstream& stream, int round_number, int words, vector<string> ch
         }
         else
         {
-            cout << "Bad ! Try again !" << endl << endl;
-            cout << "Word : ";
+            cout << "Rate ! Reessayez " << endl << endl;
+            cout << "MOT ORIGINAL : ";
         }
     }while(!victory);
     // The game continues while the player doesn't found
@@ -162,20 +161,20 @@ bool round(std::ifstream& stream, int round_number, int words, vector<string> ch
 }
 
 void end_game(int score)
-/** ------------------------------------------------
+/****************************************************
 * Display the final score.
 *
 *** ----------------------------------------------*/
 {
-    cout << "You finished with a score of " << score << " !" << endl;
-    cout << "You can do better !" << endl << endl;
+    cout << "Vous avez fini le jeu avec un score de :  " << score << " !" << endl;
+    cout << "Vous pouvez mieux faire !" << endl << endl;
 
-    cout << "The game's finished now, press enter to quit" << endl;
-    system("pause");
+    cout << "Le jeu est termine maintenant, appuyez sur une touche pour quitter ..." << endl;
+    cin.get();
 }
 
 int main()
-/** ------------------------------------------------
+/****************************************************
 * Main function, calls every others.
 *
 *** ----------------------------------------------*/
@@ -224,7 +223,7 @@ int main()
         if (game_continue)
         {
             score += 1;
-            cout << "Congrat' ! You found the mystery word ! Again." << endl << endl;
+            cout << "Bravo ! Vous avez trouve le mot mystere, encore une fois !" << endl << endl;
         }
     }while(game_continue);
 
