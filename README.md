@@ -1,4 +1,4 @@
-# Mystery-Word-
+# Mysterimo++
 C++ funny intellectual game -- Mysterimo++
 
 -----------------------
@@ -9,6 +9,8 @@ C++ funny intellectual game -- Mysterimo++
     - User-Machine phrases translated to french
     - Difficulties added : Easy, Medium and Hard
     - Better documentation for the source-code
-
+    
+  ----
+  
   ### 1.0
     - Base game, run without known problem
