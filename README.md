@@ -13,7 +13,6 @@ C++ funny intellectual game -- Mysterimo++
     
     - Better documentation for the source-code
     
-  ----
   
   ● 1.0
   
