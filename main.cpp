@@ -13,7 +13,7 @@ using namespace std;
 
 /* ------------ Game Rules Functions -----------*/
 
-int choose_difficulty()
+int choose_difficulty(){
 /***************************************************
 * Asks the user the difficulty he wants : returns
 * the number of attempts per word for the game.
@@ -21,20 +21,18 @@ int choose_difficulty()
 *
 * @return : int number of attempts per round
 ****************************************************/
-{
+
     cout << "Entrez une difficulte (facile / moyen "\
          << "/ difficile) : ";
     string choix;
     // On demande la difficulté à l'utilisateur
 
     while(choix != "facile" && choix != "moyen"\
-          && choix != "difficile")
-    {
+          && choix != "difficile"){
         getline(cin, choix);
 
         if((choix != "facile" && choix != "moyen"\
-          && choix != "difficile"))
-        {
+          && choix != "difficile")){
             cout << "Veuillez choisir une difficulte"\
                  << " permise : ";
         }
@@ -53,7 +51,7 @@ int choose_difficulty()
     // la difficulté choisie
 }
 
-string choices_word(std::ifstream& stream)
+string choices_word(std::ifstream& stream){
 /****************************************************
 * Pseudo-randomly choices a word in the dictionnary
 * and returns it.
@@ -61,7 +59,7 @@ string choices_word(std::ifstream& stream)
 *
 * @return : Word from the dictionnary
 ****************************************************/
-{
+
     int words (dic_size(stream));
 
     int rand_n (rand()%words + 1);
@@ -69,8 +67,7 @@ string choices_word(std::ifstream& stream)
 
     string line;
 
-    for (int i = 0; i < rand_n; i++)
-    {
+    for (int i = 0; i < rand_n; i++){
         getline(stream, line);
     }
     stream.clear();
@@ -82,7 +79,7 @@ string choices_word(std::ifstream& stream)
 }
 
 
-string mix_word(string word)
+string mix_word(string word){
 /****************************************************
 * Pseudo-randomly mix a word, without loyalty
 * verification.
@@ -90,24 +87,21 @@ string mix_word(string word)
 *
 * @return : mixed word
 ****************************************************/
-{
+
     string new_word;
 
     int rand_got[word.size()];
     int counter (0);
     // Counter to fill the table
 
-    for (unsigned int i = 0; i < word.size(); i++)
-    {
+    for (unsigned int i = 0; i < word.size(); i++){
         rand_got[i] = -1;
     }
     // Random list initiate
 
-    while(new_word.size() < word.size())
-    {
+    while(new_word.size() < word.size()){
         int rand_n;
-        do
-        {
+        do{
             rand_n = rand()%word.size();
         }while (is_in(rand_n, rand_got, word.size()));
         // Random number get
@@ -124,7 +118,7 @@ string mix_word(string word)
     return new_word;
 }
 
-bool round(std::ifstream& stream, int round_number, vector<string>& chosen_words, int difficulty)
+bool round(std::ifstream& stream, int round_number, vector<string>& chosen_words, int difficulty){
 /***************************************************
 * Rules a game round.
 * @param  : stream       - Stream of the dictionnary file
@@ -135,7 +129,7 @@ bool round(std::ifstream& stream, int round_number, vector<string>& chosen_words
 *
 * @return : player won the round ? true/false
 ****************************************************/
-{
+
     string word (choices_word(stream));
     // Word selection
     chosen_words.push_back(word);
@@ -152,20 +146,16 @@ bool round(std::ifstream& stream, int round_number, vector<string>& chosen_words
     bool victory (false);
     string entry;
 
-    do
-    {
+    do{
         getline(cin, entry);
 
-        if (entry == word)
-        {
+        if (entry == word){
             victory = true;
         }
-        else if (entry == "quit")
-        {
+        else if (entry == "quit"){
             return false;
         }
-        else
-        {
+        else{
             attempts_left--;
             if(attempts_left == 0) return false;
 
@@ -185,11 +175,11 @@ bool round(std::ifstream& stream, int round_number, vector<string>& chosen_words
 /////////////////////////////////////////////////
 
 
-int main()
+int main(){
 /***************************************************
 * Main function
 ****************************************************/
-{
+
     /*********************************
     * ------ GAME PREPARATION ------ *
     **********************************/
@@ -207,8 +197,7 @@ int main()
     srand(time(0));
     // Random initiate
 
-    if (!stream)
-    {
+    if (!stream){
         cout << "FATAL ERROR : Bad stream";
         return 1;
     }
@@ -226,20 +215,32 @@ int main()
 
     vector<string> chosen_words(0);
     // List of all words chosen for the game
+    bool player_continue = true;
 
-    do
-    {
+    do{
         game_continue = round(stream, round_number, chosen_words, difficulty);
 
-        if (game_continue)
-        {
+        if (game_continue){
             score += 1;
             cout << "Bravo ! Vous avez trouve le mot mystere, encore une fois !" << endl << endl;
         }
-    }while(game_continue);
+        else {
+            cout << endl << "Le mot etait : " << chosen_words[chosen_words.size() - 1] << "." << endl;
+            cout << "Vous finissez avec un score de " << score << " mots trouves ! " << endl << endl;
+            // Afficher le mot non trouvé + score
 
-    cout << endl << "Le mot etait : " << chosen_words[chosen_words.size() - 1] << "." << endl;
-    // Afficher le mot non trouvé
+            cout << "Voulez-vous continuer a jouer ? (Y/N) : ";
+            string reponse;
+            getline(cin, reponse);
+            // Récupérer réponse du joueur
 
-    end_game(score);
+            game_continue = true;
+            if(reponse != "Y" && reponse != "y"){
+                game_continue = false;
+            }
+            // Si le joueur répond oui, on continue à jouer
+        }
+    }while(game_continue && player_continue);
+
+    end_game();
 }
